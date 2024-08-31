@@ -33,7 +33,9 @@ const HotelMarkers = ({ innerMap }) => {
 
 const SetBoundsRectangles = ({ setInnerMap, setDisplayHotels, date, priceRange }) => {
   const map = useMap();
-
+  const [bounds,setBouds] = useState([])
+  const [NE,setNE] = useState([])
+  const [SW,setSW] = useState([])
   const isDateInRange = (availabilitydates, selectedDate) => {
     if (!selectedDate.startDate || !selectedDate.endDate) return true;
     const selectedStartDate = new Date(selectedDate.startDate);
@@ -49,10 +51,22 @@ const SetBoundsRectangles = ({ setInnerMap, setDisplayHotels, date, priceRange }
       );
     });
   };
+  
 
   const fetchHotelsWithinBounds = () => {
     const hotels = hotelData.filter((hotel) => {
       const inBounds = map.getBounds().contains(hotel.location);
+      const currentBounds = map.getBounds();
+
+      setNE([currentBounds.getNorthEast().lat,currentBounds.getNorthEast().lng] )
+      setSW([currentBounds.getSouthWest().lat,currentBounds.getSouthWest().lng] )
+      setBouds([SW,
+        [NE[0],SW[1]],
+        NE,
+        [SW[0],NE[1]],
+        SW
+      ])
+      console.log(bounds)
       const inDateRange = isDateInRange(hotel.availabilitydates, date);
       const inPriceRange = !priceRange || (hotel.price <= priceRange);
       return inBounds && inDateRange && inPriceRange;
@@ -89,7 +103,7 @@ const UpdateMapCenter = ({ location }) => {
 
 const MissionMap = ({ setDisplayHotels, location, date, priceRange }) => {
   const [innerMap, setInnerMap] = useState([]);
-
+  const [bounds,setBouds] = useState([])
   return (
     <div className="h-full w-full">
       <MapContainer center={location.latLon} zoom={location.zoom || 12} className="h-[100%]" scrollWheelZoom={true}>

@@ -1,5 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 const LoginWithGoogleButton = () => {
+  const navigate = useNavigate()
+  const [formData,setFormData] = useState({
+    email : "",
+    password : ""
+  })
+  const  handleFormSubmit = async ()=>{
+    try{
+      await axios.post('http://localhost:5000/user/login',formData)
+      navigate("/")
+    }catch(err){
+      console.log(err)
+    }
+  }
   return (
     <div className="flex items-center justify-center  w-full px-5 sm:px-0">
       <div className="flex bg-white rounded-lg shadow-lg border overflow-hidden max-w-sm lg:max-w-4xl w-full">
@@ -21,6 +37,7 @@ const LoginWithGoogleButton = () => {
               className="text-gray-700 border border-gray-300 rounded py-2 px-4 block w-full focus:outline-2 focus:outline-blue-700"
               type="email"
               required
+              onChange={(e)=>setFormData({...formData, email : e.target.value})}
             />
           </div>
           <div className="mt-4 flex flex-col justify-between">
@@ -32,16 +49,11 @@ const LoginWithGoogleButton = () => {
             <input
               className="text-gray-700 border border-gray-300 rounded py-2 px-4 block w-full focus:outline-2 focus:outline-blue-700"
               type="password"
+              onChange={(e)=>setFormData({...formData, password : e.target.value})}
             />
-            <a
-              href="#"
-              className="text-xs text-gray-500 hover:text-gray-900 text-end w-full mt-2"
-            >
-              Forget Password?
-            </a>
           </div>
           <div className="mt-8">
-            <button className="bg-blue-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-blue-600">
+            <button className="bg-blue-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-blue-600" onClick={handleFormSubmit}>
               Login
             </button>
           </div>

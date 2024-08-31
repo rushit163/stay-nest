@@ -1,5 +1,22 @@
-import React from "react";
+import axios from "axios";
+import { Handler } from "leaflet";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 const Form = () => {
+  const navigate = useNavigate();
+  const [formData,setFormData] = useState({
+    name : "",
+    email : "",
+    password : ""
+  })
+  const  handleFormSubmit = async ()=>{
+    try{
+      await axios.post('http://localhost:5000/user/signup',formData)
+      navigate("/login")
+    }catch(err){
+      console.log(err)
+    }
+  }
   return (
     <div className="mt-24 items-center flex justify-center px-5 lg:px-0">
       <div className="max-w-screen-xl bg-white border shadow sm:rounded-lg flex justify-center flex-1">
@@ -27,23 +44,21 @@ const Form = () => {
                   className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="text"
                   placeholder="Enter your name"
+                  onChange={(event)=>{setFormData({...formData,name:event.target.value})}}
                 />
                 <input
                   className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="email"
                   placeholder="Enter your email"
-                />
-                <input
-                  className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                  type="tel"
-                  placeholder="Enter your phone"
+                  onChange={(event)=>{setFormData({...formData,email:event.target.value})}}
                 />
                 <input
                   className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="password"
                   placeholder="Password"
+                  onChange={(event)=>{setFormData({...formData,password:event.target.value})}}
                 />
-                <button className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                <button className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none" onClick={handleFormSubmit}>
                   <svg
                     className="w-6 h-6 -ml-2"
                     fill="none"
