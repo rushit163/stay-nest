@@ -1,78 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import { MapContainer, useMapEvents, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import { divIcon } from 'leaflet';
-import hotelData from './hotelData';
 import hotelImg from '../../utils/hotel.jpeg';
 import './customstyles.css';
-
+import axios from 'axios';
 const HotelMarkers = ({ innerMap }) => {
-  return innerMap.map((hotel) => {
-    const icon = divIcon({
-      className: 'custom-icon',
-      iconSize: [30, 30],
-      html: `<div>${hotel.price}</div>`,
-    });
-    return (
-      <Marker key={hotel.id} position={hotel.location} icon={icon}>
-        <Popup>
-          <div className="flex flex-col items-start justify-center content-center">
-            <img src={hotelImg} alt="Hotel" className="rounded-2xl" />
-            <div className="flex justify-between items-center w-full">
-              <div className="font-semibold">Room in {hotel.District}</div>
-            </div>
-            <div className="font-thin">{hotel.name}</div>
-            <div className="font-thin">A cozy apartment</div>
-            <div className="font-thin">10-15 Mar</div>
-            <div className="font-semibold pt-2">₹{hotel.price} night</div>
-          </div>
-        </Popup>
-      </Marker>
-    );
-  });
-};
-
-const SetBoundsRectangles = ({ setInnerMap, setDisplayHotels, date, priceRange }) => {
-  const map = useMap();
-  const [bounds,setBouds] = useState([])
-  const [NE,setNE] = useState([])
-  const [SW,setSW] = useState([])
-  const isDateInRange = (availabilitydates, selectedDate) => {
-    if (!selectedDate.startDate || !selectedDate.endDate) return true;
-    const selectedStartDate = new Date(selectedDate.startDate);
-    const selectedEndDate = new Date(selectedDate.endDate);
-
-    return availabilitydates.some(({ from, to }) => {
-      const hotelStartDate = new Date(from);
-      const hotelEndDate = new Date(to);
+  if (Array.isArray(innerMap) && innerMap.length > 0) {
+    return innerMap.map((hotel) => {
+      const icon = divIcon({
+        className: 'custom-icon',
+        iconSize: [30, 30],
+        html: `<div>${hotel.price}</div>`,
+      });
       return (
-        (selectedStartDate >= hotelStartDate && selectedStartDate <= hotelEndDate) ||
-        (selectedEndDate >= hotelStartDate && selectedEndDate <= hotelEndDate) ||
-        (selectedStartDate <= hotelStartDate && selectedEndDate >= hotelEndDate)
+        <Marker key={hotel._id} position={[hotel.location.coordinates[1],hotel.location.coordinates[0]]} icon={icon}>
+          <Popup>
+            <div className="flex flex-col items-start justify-center content-center">
+              <img src={hotelImg} alt="Hotel" className="rounded-2xl" />
+              <div className="flex justify-between items-center w-full">
+                <div className="font-semibold">Room in {hotel.district}</div>
+              </div>
+              <div className="font-thin">{hotel.name}</div>
+              <div className="font-thin">A cozy apartment</div>
+              <div className="font-thin">10-15 Mar</div>
+              <div className="font-semibold pt-2">₹{hotel.price} night</div>
+            </div>
+          </Popup>
+        </Marker>
       );
     });
-  };
+  }
+
+  return null;
+};
+
+const  SetBoundsRectangles =  ({ setInnerMap, setDisplayHotels, date, priceRange }) => {
+  const map = useMap();
+  const fetchHotelsWithinBounds = async () => {
+    const currentBounds = map.getBounds();
+    const newbounds = [
+      [currentBounds.getSouthWest().lng,currentBounds.getSouthWest().lat], 
+      [currentBounds.getSouthEast().lng,currentBounds.getSouthEast().lat], 
+      [currentBounds.getNorthEast().lng,currentBounds.getNorthEast().lat], 
+      [currentBounds.getNorthWest().lng,currentBounds.getNorthWest().lat], 
+      [currentBounds.getSouthWest().lng,currentBounds.getSouthWest().lat]  
+  ];
+    const hotels = await axios.get("http://localhost:5000/hotels/getHotels",{
+      params: {
+        bonds: [newbounds]
+      }
+    })
   
 
-  const fetchHotelsWithinBounds = () => {
-    const hotels = hotelData.filter((hotel) => {
-      const inBounds = map.getBounds().contains(hotel.location);
-      const currentBounds = map.getBounds();
-
-      setNE([currentBounds.getNorthEast().lat,currentBounds.getNorthEast().lng] )
-      setSW([currentBounds.getSouthWest().lat,currentBounds.getSouthWest().lng] )
-      setBouds([SW,
-        [NE[0],SW[1]],
-        NE,
-        [SW[0],NE[1]],
-        SW
-      ])
-      console.log(bounds)
-      const inDateRange = isDateInRange(hotel.availabilitydates, date);
-      const inPriceRange = !priceRange || (hotel.price <= priceRange);
-      return inBounds && inDateRange && inPriceRange;
-    });
-    setInnerMap(hotels);
-    setDisplayHotels(hotels);
+    setInnerMap(hotels.data);
+    setDisplayHotels(hotels.data);
   };
 
   useEffect(() => {
@@ -103,10 +84,10 @@ const UpdateMapCenter = ({ location }) => {
 
 const MissionMap = ({ setDisplayHotels, location, date, priceRange }) => {
   const [innerMap, setInnerMap] = useState([]);
-  const [bounds,setBouds] = useState([])
+  console.log(innerMap)
   return (
     <div className="h-full w-full">
-      <MapContainer center={location.latLon} zoom={location.zoom || 12} className="h-[100%]" scrollWheelZoom={true}>
+      <MapContainer center={location.latLon} zoom={12} className="h-[100%]" scrollWheelZoom={true} maxZoom={12} bounceAtZoomLimits= {false}>
         <TileLayer
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
@@ -120,3 +101,5 @@ const MissionMap = ({ setDisplayHotels, location, date, priceRange }) => {
 };
 
 export default MissionMap;
+
+

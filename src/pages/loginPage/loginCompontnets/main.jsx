@@ -10,8 +10,11 @@ const LoginWithGoogleButton = () => {
   })
   const  handleFormSubmit = async ()=>{
     try{
-      await axios.post('http://localhost:5000/user/login',formData)
+      const response = await axios.post('http://localhost:5000/user/login', formData, {
+        withCredentials: true
+      });     
       navigate("/")
+      console.log(response)
     }catch(err){
       console.log(err)
     }

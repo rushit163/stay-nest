@@ -24,13 +24,13 @@ const Dashboard = ({ location, setLocation, date, priceRange }) => {
     hotel9, hotel10, hotel11, hotel12, hotel13
   ];
   const [displayHotel, setDisplayHotels] = useState([]);
-
+  console.log(displayHotel)
   return (
     <div className='sm:flex sm:flex-row flex-col-reverse flex justify-between mb-52 sm:mb-0'>
       <div className='flex flex-col items-start justify-start sm:w-2/3 w-full'>
         <div className='col-span-3 px-3'><span className='font-semibold'>{displayHotel.length}</span> rooms available</div>
         <div className='grid xl:grid-cols-3 md:grid-cols-2 grid-cols-2 items-center justify-between w-full px-3 py-5 gap-4'>
-          {displayHotel.map((hotel) => (
+          {Array.isArray(displayHotel) && displayHotel.length > 0?displayHotel.map((hotel) => (
             <Card 
               key={hotel.id}
               name={hotel.name}
@@ -41,7 +41,7 @@ const Dashboard = ({ location, setLocation, date, priceRange }) => {
               rooms = {hotel.rooms}
               garden = {hotel.garder}
             />
-          ))}
+          )):null}
         </div>
       </div>
       <div className='sm:sticky top-0 sm:h-[100vh] h-[40vh] sm:w-1/3 w-full block'>
