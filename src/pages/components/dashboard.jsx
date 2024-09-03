@@ -14,7 +14,7 @@ import hotel10 from '../../utils/hotel10.jpeg';
 import hotel11 from '../../utils/hotel11.jpeg';
 import hotel12 from '../../utils/hotel12.jpeg';
 import hotel13 from '../../utils/hotel13.webp';
-
+import { NavLink, useNavigate } from 'react-router-dom';
 import Card from './card.jsx';
 import MissionMap from './missionMap.jsx';
 
@@ -25,6 +25,8 @@ const Dashboard = ({ location, setLocation, date, priceRange }) => {
   ];
   const [displayHotel, setDisplayHotels] = useState([]);
   console.log(displayHotel)
+  const navigate = useNavigate();
+ 
   return (
     <div className='sm:flex sm:flex-row flex-col-reverse flex justify-between mb-52 sm:mb-0'>
       <div className='flex flex-col items-start justify-start sm:w-2/3 w-full'>
@@ -32,7 +34,7 @@ const Dashboard = ({ location, setLocation, date, priceRange }) => {
         <div className='grid xl:grid-cols-3 md:grid-cols-2 grid-cols-2 items-center justify-between w-full px-3 py-5 gap-4'>
           {Array.isArray(displayHotel) && displayHotel.length > 0?displayHotel.map((hotel) => (
             <Card 
-              key={hotel.id}
+              key={hotel._id}
               name={hotel.name}
               price={hotel.price}
               image={hotelImages[hotel.id % hotelImages.length]}
@@ -40,7 +42,9 @@ const Dashboard = ({ location, setLocation, date, priceRange }) => {
               pool = {hotel.pool}
               rooms = {hotel.rooms}
               garden = {hotel.garder}
+              id = {hotel._id}
             />
+
           )):null}
         </div>
       </div>

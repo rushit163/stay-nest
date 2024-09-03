@@ -45,13 +45,11 @@ const  SetBoundsRectangles =  ({ setInnerMap, setDisplayHotels, date, priceRange
       [currentBounds.getNorthWest().lng,currentBounds.getNorthWest().lat], 
       [currentBounds.getSouthWest().lng,currentBounds.getSouthWest().lat]  
   ];
-    const hotels = await axios.get("http://localhost:5000/hotels/getHotels",{
+    const hotels = await axios.get("http://localhost:5000/hotel/getHotels",{
       params: {
         bonds: [newbounds]
       }
     })
-  
-
     setInnerMap(hotels.data);
     setDisplayHotels(hotels.data);
   };

@@ -1,11 +1,16 @@
 import React from 'react'
-
-
-const Card = ({name,price,image,location,pool,rooms,garden}) => {
+import HotelImage from '../../utils/hotel.jpeg'
+import { useNavigate } from 'react-router-dom'
+const Card = ({name,price,image,location,pool,rooms,garden,id}) => {
+  const navigate = useNavigate()
+  const hanleOnClick = ()=>{
+    console.log(id)
+    navigate(`/hotel/${id}`)
+  }
   return (
     <div>
       <div className='flex flex-col items-start justify-center content-center'>
-                <img src={image} className='rounded-2xl'/>
+                <img src={HotelImage} className='rounded-2xl' onClick={hanleOnClick}/>
                 <div className='flex justify-between items-center w-full '>
                     <div className='font-semibold'>Room in {location}</div>
                 </div>
