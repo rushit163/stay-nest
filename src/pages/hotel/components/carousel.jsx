@@ -5,20 +5,20 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import hotelImge from '../../../utils/hotel.jpeg'
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import { Navigation} from 'swiper/modules';
 
 const ImageCarousel = () => {
   return (
-    <Swiper navigation={true} modules={[Navigation]} className="mySwiper w-90">
-        <SwiperSlide><img src={hotelImge} className='w-[80vw] h-[50vh]'/></SwiperSlide>
-        <SwiperSlide><img src={hotelImge} className='w-[80vw] h-[50vh]'/></SwiperSlide>
-        <SwiperSlide><img src={hotelImge} className='w-[80vw] h-[50vh]'/></SwiperSlide>
-        <SwiperSlide><img src={hotelImge} className='w-[80vw] h-[50vh]'/></SwiperSlide>
-        <SwiperSlide><img src={hotelImge} className='w-[80vw] h-[50vh]'/></SwiperSlide>
-        <SwiperSlide><img src={hotelImge} className='w-[80vw] h-[50vh]'/></SwiperSlide>
-        <SwiperSlide><img src={hotelImge} className='w-[80vw] h-[50vh]'/></SwiperSlide>
-        <SwiperSlide><img src={hotelImge} className='w-[80vw] h-[50vh]'/></SwiperSlide>
-        <SwiperSlide><img src={hotelImge} className='w-[80vw] h-[50vh]'/></SwiperSlide>
+    <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
+        <SwiperSlide><img src={hotelImge} className='w-full h-full'/></SwiperSlide>
+        <SwiperSlide><img src={hotelImge} className='w-full h-full'/></SwiperSlide>
+        <SwiperSlide><img src={hotelImge} className='w-full h-full'/></SwiperSlide>
+        <SwiperSlide><img src={hotelImge} className='w-full h-full'/></SwiperSlide>
+        <SwiperSlide><img src={hotelImge} className='w-full h-full'/></SwiperSlide>
+        <SwiperSlide><img src={hotelImge} className='w-full h-full'/></SwiperSlide>
+        <SwiperSlide><img src={hotelImge} className='w-full h-full'/></SwiperSlide>
+        <SwiperSlide><img src={hotelImge} className='w-full h-full'/></SwiperSlide>
+        <SwiperSlide><img src={hotelImge} className='w-full h-full'/></SwiperSlide>
     </Swiper>
   )
 }

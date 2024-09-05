@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignUPForm from './pages/signuppage/signup';
 import User from './pages/userPage/user';
 import Hotel from './pages/hotel/hotel';
+import Demo from './demo';
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +15,7 @@ function App() {
           <Route path="/register" element={<SignUPForm/>}/>
           <Route path="/user" element={<User/>}/>
           <Route path="/hotel/:id" element={<Hotel/>}/>
+          <Route path="/demo" element={<Demo/>}/>
       </Routes>
     </BrowserRouter>
   );

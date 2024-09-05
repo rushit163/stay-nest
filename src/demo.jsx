@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import ImageCarousel from "./components/carousel";
+import ImageCarousel from "./pages/hotel/components/carousel";
 import DatePicker from 'react-datepicker';
 import { useParams } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -13,10 +13,7 @@ export default function Component() {
   
     useEffect(() => {
       const fetchData = async () => {
-        const response = await axios.get(`http://localhost:5000/hotel/getHotel/${id}`, {
-            withCredentials: true
-          });
-        console.log(response.data)
+        const response = await axios.get(`http://localhost:5000/hotel/getHotel/${id}`);
         setHotelData(response.data);
       };
       fetchData();
@@ -28,18 +25,18 @@ export default function Component() {
       setEndDate(endDate);
     };
   
-    const handleBooking = async() => {
+    const handleBooking = () => {
       if (startDate && endDate) {
         let currentDate = new Date(startDate);
         const dateArray = [];
-        
+  
         while (currentDate <= new Date(endDate)) {
           currentDate.setUTCHours(0, 0, 0, 0);
           currentDate.setDate(currentDate.getDate() + 1);
           dateArray.push(currentDate.toISOString());
         }
-        const response = await axios.post(`http://localhost:5000/hotel/bookHote/${id}`,{date : dateArray},{withCredentials : true})
-        console.log(response)
+  
+        console.log('Dates to be booked:', dateArray);
       } else {
         console.log('Please select a valid date range');
       }
@@ -66,7 +63,7 @@ export default function Component() {
           <div className="relative mb-4">
             <ImageCarousel/>
           </div>
-          <h3 className="text-2xl font-semibold mb-2">{hotelData?hotelData.name:null}</h3>
+          <h3 className="text-2xl font-semibold mb-2">Ibis New Delhi Aerocity Hotel</h3>
           <div className="flex flex-wrap space-x-2 mb-4">
             <div>1 Rooms</div>
             <div>Swimming pool</div>

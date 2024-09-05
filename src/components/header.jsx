@@ -65,22 +65,22 @@ const Header = ({ setPriceRange, setDates, setLocation, setLatLon, date }) => {
         </div>
 
         {locationOpen && (
-          <div>
+          <>
             <div
-              className="absolute h-[100vh] w-[100vw] z-0 bg-gray-500 bg-opacity-55"
+              className="fixed inset-0 bg-black bg-opacity-55 z-30"
               onClick={handleClosePopup}
             ></div>
-            <div className="absolute top-24 max-w-4xl w-20% left-0 right-0 ml-auto mr-auto p-8">
-              <div className="bg-white p-8 rounded-lg z-[999]">
+            <div className="absolute top-24 max-w-4xl w-11/12 left-0 right-0 ml-auto mr-auto p-8 z-40">
+              <div className="bg-white p-8 rounded-lg">
                 <div className="flex flex-row items-stretch justify-between">
                   <h1 className="text-3xl font-semibold mb-4">
                     Holiday rentals in India
                   </h1>
                   <svg
-                    width="5%"
+                    width="24"
+                    height="24"
                     onClick={handleClosePopup}
                     className="cursor-pointer"
-                    height="5%"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -88,9 +88,9 @@ const Header = ({ setPriceRange, setDates, setLocation, setLatLon, date }) => {
                     <path
                       d="M17 7L7 17M7 7L17 17"
                       stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </div>
@@ -100,6 +100,7 @@ const Header = ({ setPriceRange, setDates, setLocation, setLatLon, date }) => {
                 <div className="grid grid-rows-4 grid-flow-col gap-4">
                   {locations.map((loc) => (
                     <div
+                      key={loc.id} // Add a unique key for each location
                       className="bg-red-300 rounded-lg text-center text-white cursor-pointer py-5"
                       onClick={() => {
                         handleLocationChange(loc);
@@ -114,7 +115,7 @@ const Header = ({ setPriceRange, setDates, setLocation, setLatLon, date }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </>
         )}
         {dateOpen && (
           <div>
