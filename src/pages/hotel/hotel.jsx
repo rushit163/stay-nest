@@ -1,16 +1,16 @@
 import React, { useState,useEffect } from "react";
 import ImageCarousel from "./components/carousel";
-import DatePicker from 'react-datepicker';
+import DatePicker, { DateObject, getAllDatesInRange } from "react-multi-date-picker"
+import DatePanel from "react-multi-date-picker/plugins/date_panel"
 import { useParams } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 
 export default function Component() {
-    const [startDate, setStartDate] = useState();
-    const [endDate, setEndDate] = useState();
     let { id } = useParams();
     const [hotelData, setHotelData] = useState();
-  
+    const [dates, setDates] = useState([])
+    const [allDates, setAllDates] = useState([])
     useEffect(() => {
       const fetchData = async () => {
         const response = await axios.get(`http://localhost:5000/hotel/getHotel/${id}`, {
@@ -22,22 +22,14 @@ export default function Component() {
       fetchData();
     }, [id]);
   
-    const handleChange = (range) => {
-      const [startDate, endDate] = range;
-      setStartDate(startDate);
-      setEndDate(endDate);
-    };
-  
     const handleBooking = async() => {
-      if (startDate && endDate) {
-        let currentDate = new Date(startDate);
-        const dateArray = [];
-        
-        while (currentDate <= new Date(endDate)) {
-          currentDate.setUTCHours(0, 0, 0, 0);
-          currentDate.setDate(currentDate.getDate() + 1);
-          dateArray.push(currentDate.toISOString());
-        }
+      if (allDates.length > 0) {
+        const dateArray = allDates.map(date => {
+          const utcDate = new Date(date);
+          utcDate.setUTCHours(0, 0, 0, 0);
+          return utcDate.toISOString();
+        });
+        console.log(dateArray)
         const response = await axios.post(`http://localhost:5000/hotel/bookHote/${id}`,{date : dateArray},{withCredentials : true})
         console.log(response)
       } else {
@@ -85,13 +77,17 @@ export default function Component() {
             <div className="space-y-2">
               <div htmlFor="start-date">Start Date:</div>
               <DatePicker
-              selected={startDate}
-              onChange={handleChange}
-              startDate={startDate}
-              endDate={endDate}
-              selectsRange
-              className="w-full"
-            />
+                range
+                fixMainPosition
+                value={dates}
+                minDate={new DateObject()}
+                onChange={(dateObjects) => {
+                  setDates(dateObjects);
+                  const allDatesInRange = getAllDatesInRange(dateObjects).map((date) => date.format("YYYY-MM-DD"));
+                  setAllDates(allDatesInRange);
+                }}
+            
+              />
             </div>
             <div className="space-y-2">
               <div htmlFor="guests">Enter the number of guests:</div>
